@@ -36,10 +36,10 @@ if __name__ == '__main__':
     location_name = str(os.environ.get('LOCATION_NAME', env.get('LOCATION_NAME')))
     rarity_limit = int(os.environ.get('RARITY_LIMIT', env.get('RARITY_LIMIT')))
     slack_webhook_url = str(os.environ.get('SLACK_WEBHOOK_URL', env.get('SLACK_WEBHOOK_URL')))
+    step_limit = int(os.environ.get('STEP_LIMIT', env.get('STEP_LIMIT')))
 
     # const vars
     step_size = 0.0025
-    step_limit = 5
 
     # debug vars, used to test slack integration w/o waiting
     use_cache = False
