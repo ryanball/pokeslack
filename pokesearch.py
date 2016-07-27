@@ -46,7 +46,7 @@ class Pokesearch:
         while not self.api.login(self.auth_service, self.username, self.password):
             logger.warn('failed to login to pokemon go, retrying...')
             time.sleep(REQ_SLEEP_IN_SECONDS)
-            loginAttempts++
+            loginAttempts = loginAttempts + 1
             if loginAttempts >= MAX_FAILED_ATTEMPTS:
                 time.sleep(FAILED_SLEEP_IN_SECONDS)
                 loginAttempts = 0
