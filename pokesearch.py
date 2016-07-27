@@ -12,7 +12,9 @@ from pokedata import Pokedata, parse_map
 
 logger = logging.getLogger(__name__)
 
-REQ_SLEEP = 1
+REQ_SLEEP_IN_SECONDS = 1
+MAX_FAILED_ATTEMPTS = 5
+FAILED_SLEEP_IN_SECONDS = 30
 
 #Constants for Hex Grid
 #Gap between vertical and horzonal "rows"
@@ -39,9 +41,15 @@ class Pokesearch:
 
         self.api.set_position(*self.position)
 
+        loginAttempts = 0
+
         while not self.api.login(self.auth_service, self.username, self.password):
             logger.warn('failed to login to pokemon go, retrying...')
-            time.sleep(REQ_SLEEP)
+            time.sleep(REQ_SLEEP_IN_SECONDS)
+            loginAttempts++
+            if (loginAttempts >= MAX_FAILED_ATTEMPTS):
+                time.sleep(FAILED_SLEEP_IN_SECONDS)
+                loginAttempts = 0
 
         logger.info('login successful')
 
@@ -75,7 +83,7 @@ class Pokesearch:
                 logger.info('Map Download failed. Trying again.')
                 self.api.get_map_objects(latitude = f2i(lat), longitude = f2i(lng), since_timestamp_ms = timestamps, cell_id = cell_ids)
                 response_dict = self.api.call()
-                time.sleep(REQ_SLEEP)
+                time.sleep(REQ_SLEEP_IN_SECONDS)
 
             # try:
             pokemons = parse_map(response_dict)
@@ -91,7 +99,7 @@ class Pokesearch:
                 #     logger.info("have duplicate poke: %s", key)
             total_steps = (3 * (num_steps**2)) - (3 * num_steps) + 1
             logger.info('Completed {:5.2f}% of scan.'.format(float(step) / total_steps * 100))
-            time.sleep(REQ_SLEEP)
+            time.sleep(REQ_SLEEP_IN_SECONDS)
 
 def generate_location_steps(position, num_steps):
 
