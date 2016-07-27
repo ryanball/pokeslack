@@ -47,7 +47,7 @@ class Pokesearch:
             logger.warn('failed to login to pokemon go, retrying...')
             time.sleep(REQ_SLEEP_IN_SECONDS)
             loginAttempts++
-            if (loginAttempts >= MAX_FAILED_ATTEMPTS):
+            if loginAttempts >= MAX_FAILED_ATTEMPTS:
                 time.sleep(FAILED_SLEEP_IN_SECONDS)
                 loginAttempts = 0
 
